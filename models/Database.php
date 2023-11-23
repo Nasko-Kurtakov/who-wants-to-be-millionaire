@@ -60,7 +60,6 @@ class Database
         VALUES (?, ?)";
 
         $stmt = $this->connection->prepare($queryString);
-        // $pass = password_hash($password, PASSWORD_DEFAULT);
-        $stmt->execute([$email, $password]);
+        $stmt->execute([$email, password_hash($password, PASSWORD_DEFAULT)]);
     }
 }
