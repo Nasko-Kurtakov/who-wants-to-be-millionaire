@@ -53,4 +53,14 @@ class Database
 
         return $questions;
     }
+
+    public function registerUser($email, $password)
+    {
+        $queryString = "INSERT INTO Users (email, password)
+        VALUES (?, ?)";
+
+        $stmt = $this->connection->prepare($queryString);
+        // $pass = password_hash($password, PASSWORD_DEFAULT);
+        $stmt->execute([$email, $password]);
+    }
 }
