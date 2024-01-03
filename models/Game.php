@@ -4,47 +4,63 @@ namespace models;
 
 use Serializable;
 
+
 class Game implements Serializable
 {
+    //id,pass,username,name,usertype
     private $questions;
+    private $currentIndex;
 
-    private $currentQuestionIndex;
+    private $isInProgress = false;
 
     public function __construct($questions)
     {
         $this->questions = $questions;
-        $this->currentQuestionIndex = 0; //badddddd
+        $this->currentIndex = 0;
+        $this->isInProgress = false;
     }
 
     public function getQuestion()
     {
-        return $this->questions[$this->currentQuestionIndex];
+        return $this->questions[$this->currentIndex];
+    }
+
+    public function questionNumber()
+    {
+        return $this->currentIndex + 1;
     }
 
     public function nextQuestion()
     {
-        $this->currentQuestionIndex += 1;
+        $this->currentIndex++;
     }
 
-    public function currentQuestionNumber()
+    public function startGame()
     {
-        return $this->currentQuestionIndex + 1;
+        $this->isInProggress = true;
+    }
+
+    public function isGameInProgress()
+    {
+        return $this->isInProgress;
     }
 
     public function serialize()
     {
-        return serialize(
-            array(
-                "questions" => $this->questions,
-                "currentQuestionIndex" => $this->currentQuestionIndex
-            )
-        );
+        $serialized = serialize([
+            'questions' => $this->questions,
+            'currentIndex' => $this->currentIndex,
+            'isInProgress' => $this->isInProgress
+        ]);
+
+        return $serialized;
     }
 
     public function unserialize($data)
     {
-        $unserialized = unserialize($data);
-        $this->questions = $unserialized["questions"];
-        $this->currentQuestionIndex = $unserialized["currentQuestionIndex"];
+        $unserializedData = unserialize($data);
+        $this->questions = $unserializedData['questions'];
+        $this->currentIndex = $unserializedData['currentIndex'];
+        $this->isInProgress = $unserializedData['isInProgress'];
     }
 }

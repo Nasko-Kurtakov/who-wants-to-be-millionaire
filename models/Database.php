@@ -56,10 +56,33 @@ class Database
 
     public function registerUser($email, $password)
     {
-        $queryString = "INSERT INTO Users (email, password)
-        VALUES (?, ?)";
+        $queryString = "INSERT INTO Users (email, password) VALUES (?, ?)";
 
+        try {
+            $stmt = $this->connection->prepare($queryString);
+            $success = $stmt->execute([$email, password_hash($password, PASSWORD_DEFAULT)]);
+
+            return $success;
+        } catch (PDOException $e) {
+            // Handle the exception (e.g., log it or return false)
+            return false;
+        }
+    }
+
+
+    public function loginUser($email, $password)
+    {
+        $queryString = "SELECT user_id, email, password FROM Users WHERE email = ?";
         $stmt = $this->connection->prepare($queryString);
-        $stmt->execute([$email, password_hash($password, PASSWORD_DEFAULT)]);
+        $stmt->execute([$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($password, $user['password'])) {
+            // Login successful
+            return $user;
+        } else {
+            // Login failed
+            return false;
+        }
     }
 }

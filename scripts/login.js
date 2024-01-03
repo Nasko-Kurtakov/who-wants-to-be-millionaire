@@ -1,10 +1,10 @@
-const btn = document.getElementById("register");
+const btn = document.getElementById("login");
 
-function registerUser(event) {
+function login(event) {
   const email = document.getElementById("email").value;
   const password = document.getElementById("pass").value;
 
-  fetch("../controllers/registerController.php", {
+  fetch("../controllers/loginController.php", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,11 +18,12 @@ function registerUser(event) {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
+      //user was logged in;
+      window.location = "./start.php";
     })
     .catch((err) => {
       console.log(err);
     });
 }
 
-btn.addEventListener("click", registerUser);
+btn.addEventListener("click", login);

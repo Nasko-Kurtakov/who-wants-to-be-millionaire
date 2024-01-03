@@ -11,18 +11,15 @@ session_start();
 
 function createGame()
 {
-
     $db = new Database();
-    $questions = $db->getQuestions();
 
+    $questions = $db->getQuestions();
 
     $game = new Game($questions);
 
-    // $_SESSION["game"] = $game;
+    $game->startGame();
+    $_SESSION["game"] = $game;
 
-    // header('Location: ../views/gamePage.php');
+    header('Location: ../views/gamePage.php');
 }
-
-
-
 createGame();
